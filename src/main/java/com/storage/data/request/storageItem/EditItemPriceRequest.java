@@ -1,20 +1,14 @@
 package com.storage.data.request.storageItem;
 
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.UUID;
 
 @Setter(AccessLevel.PRIVATE)
 @Getter
-public class CreateStorageItemRequest {
-
-    @NotBlank
-    @UUID
-    private String referencedItemId;
+public class EditItemPriceRequest {
 
     @Positive
     private double price;

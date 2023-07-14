@@ -48,8 +48,13 @@ public class StorageItemController {
     }
 
     @GetMapping("/{referencedItemId}")
-    public ResponseEntity<GetItemByReferencedItemIdResponse> GetItemByReferencedItemId(@PathVariable String referencedItemId) {
+    public ResponseEntity<GetItemByReferencedItemIdResponse> GetItemByReferencedItemId(@PathVariable String referencedItemId) throws NotUuidException, ReferencedItemNotFoundException {
         return ResponseEntity.ok(this.getItemService.getItemByReferencedItemId(referencedItemId));
+    }
+
+    @GetMapping
+    public ResponseEntity<GetAllItemsResponse> getAllItems(){
+        return ResponseEntity.ok(this.getItemService.getAllItems());
     }
 
 }

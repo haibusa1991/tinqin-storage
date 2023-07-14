@@ -11,6 +11,8 @@ import com.storage.exceptions.InsuficientItemQuantityException;
 import com.storage.exceptions.NotUuidException;
 import com.storage.exceptions.ReferencedItemNotFoundException;
 import com.storage.repository.StorageItemRepository;
+import com.storage.services.storageItem.getItemService.GetItemService;
+import com.storage.validation.UuidValidation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,12 +25,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EditStorageItemServiceImpl implements EditStorageItemService {
     private final StorageItemRepository storageItemRepository;
+    private final GetItemService getItemService;
 
     @Override
     public EditItemPriceResponse changeStorageItemPrice(EditItemPriceRequest request, String referencedItemId) throws ReferencedItemNotFoundException, NotUuidException {
 
-        UUID referencedItemIdUuid = this.verifyValidUuid(referencedItemId);
-        StorageItem item = this.getItemByUuid(referencedItemIdUuid);
+        UUID referencedItemIdUuid = UuidValidation.verifyValidUuid(referencedItemId);
+        StorageItem item = getItemService.getItemByUuid(referencedItemIdUuid);
 
         item.setPrice(BigDecimal.valueOf(request.getPrice()));
         StorageItem persisted = this.storageItemRepository.save(item);
@@ -44,8 +47,8 @@ public class EditStorageItemServiceImpl implements EditStorageItemService {
     @Override
     public ImportItemResponse importItem(ImportItemRequest request, String referencedItemId) throws NotUuidException, ReferencedItemNotFoundException {
 
-        UUID referencedItemIdUuid = this.verifyValidUuid(referencedItemId);
-        StorageItem item = this.getItemByUuid(referencedItemIdUuid);
+        UUID referencedItemIdUuid = UuidValidation.verifyValidUuid(referencedItemId);
+        StorageItem item = getItemService.getItemByUuid(referencedItemIdUuid);
 
         item.increaseQuantity(request.getQuantity());
 
@@ -62,8 +65,8 @@ public class EditStorageItemServiceImpl implements EditStorageItemService {
     @Override
     public ExportItemResponse exportItem(ExportItemRequest request, String referencedItemId) throws NotUuidException, ReferencedItemNotFoundException, InsuficientItemQuantityException {
 
-        UUID referencedItemIdUuid = this.verifyValidUuid(referencedItemId);
-        StorageItem item = this.getItemByUuid(referencedItemIdUuid);
+        UUID referencedItemIdUuid = UuidValidation.verifyValidUuid(referencedItemId);
+        StorageItem item = getItemService.getItemByUuid(referencedItemIdUuid);
 
         if (request.getQuantity() > item.getQuantity()) {
             throw new InsuficientItemQuantityException(referencedItemId);
@@ -79,24 +82,5 @@ public class EditStorageItemServiceImpl implements EditStorageItemService {
                 .quantity(persisted.getQuantity())
                 .price(persisted.getPrice().doubleValue())
                 .build();
-    }
-
-
-    private UUID verifyValidUuid(String referencedItemId) throws NotUuidException {
-        try {
-            return UUID.fromString(referencedItemId);
-        } catch (IllegalArgumentException e) {
-            throw new NotUuidException(e.getMessage());
-        }
-    }
-
-    private StorageItem getItemByUuid(UUID id) throws ReferencedItemNotFoundException {
-        Optional<StorageItem> itemOptional = this.storageItemRepository.findStorageItemByReferencedItemId(id);
-
-        if (itemOptional.isEmpty()) {
-            throw new ReferencedItemNotFoundException(id.toString());
-        }
-
-        return itemOptional.get();
     }
 }

@@ -4,9 +4,15 @@ import com.tinqin.storage.api.operations.storageItem.createStorageItem.CreateSto
 import com.tinqin.storage.api.operations.storageItem.createStorageItem.CreateStorageItemOperation;
 import com.tinqin.storage.api.operations.storageItem.createStorageItem.CreateStorageItemResult;
 import com.tinqin.storage.core.exception.ItemExistsException;
+import com.tinqin.storage.core.exception.ItemNotFoundException;
+import com.tinqin.storage.core.exception.ReferencedItemNotFoundException;
 import com.tinqin.storage.persistence.entity.StorageItem;
 import com.tinqin.storage.persistence.repository.StorageItemRepository;
+import com.tinqin.zoostore.api.operations.item.getItemById.GetItemByIdResult;
+import com.tinqin.zoostore.restexport.ZooStoreRestExport;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,6 +22,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CreateStorageItemOperationProcessor implements CreateStorageItemOperation {
     private final StorageItemRepository storageItemRepository;
+    private final ZooStoreRestExport zooStoreRestExport;
+
 
     @Override
     public CreateStorageItemResult process(CreateStorageItemInput input) {
@@ -23,6 +31,12 @@ public class CreateStorageItemOperationProcessor implements CreateStorageItemOpe
 
         if (isExistingItem) {
             throw new ItemExistsException(input.getReferencedItemId());
+        }
+
+        try {
+            zooStoreRestExport.getItemById(input.getReferencedItemId());
+        } catch (FeignException e) {
+            throw new ReferencedItemNotFoundException(input.getReferencedItemId());
         }
 
         StorageItem item = StorageItem.builder()

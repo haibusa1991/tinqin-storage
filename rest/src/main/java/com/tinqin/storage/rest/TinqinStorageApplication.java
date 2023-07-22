@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "com.tinqin.storage.persistence.repository")
 @SpringBootApplication
 public class TinqinStorageApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(TinqinStorageApplication.class, args);
 	}

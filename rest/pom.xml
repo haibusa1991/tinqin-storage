@@ -4,10 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.tinqin.storage</groupId>
-        <artifactId>tinqin.storage</artifactId>
+        <artifactId>storage</artifactId>
         <version>${revision}</version>
     </parent>
-    <groupId>com.tinqin.storage.rest</groupId>
     <artifactId>rest</artifactId>
     <version>${revision}</version>
     <name>rest</name>
@@ -16,13 +15,13 @@
         <dependency>
             <groupId>com.tinqin.storage</groupId>
             <artifactId>api</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.tinqin.storage.core</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>core</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>

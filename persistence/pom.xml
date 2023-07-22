@@ -4,10 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.tinqin.storage</groupId>
-        <artifactId>tinqin.storage</artifactId>
+        <artifactId>storage</artifactId>
         <version>${revision}</version>
     </parent>
-    <groupId>com.tinqin.storage.persistence</groupId>
     <artifactId>persistence</artifactId>
     <version>${revision}</version>
     <name>persistence</name>

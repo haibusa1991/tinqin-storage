@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UUID;
 
-@Setter(AccessLevel.PRIVATE)
+@Setter
 @Getter
 @Builder
 public class GetStorageItemByReferencedIdInput implements ProcessorInput {

@@ -37,7 +37,7 @@ public class StorageItemControllerAdvise {
     @ExceptionHandler(ReferencedItemNotFoundException.class)
     @ResponseBody
     public ResponseEntity<String> handleReferencedItemNotFoundException(ReferencedItemNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ItemExistsException.class)

@@ -1,5 +1,6 @@
 package com.tinqin.storage.core.processor.storageItem;
 
+import com.tinqin.storage.core.exception.ReferencedItemNotFoundException;
 import lombok.RequiredArgsConstructor;
 import com.tinqin.storage.api.operations.storageItem.getStorageItemByReferencedId.GetStorageItemByReferencedIdInput;
 import com.tinqin.storage.api.operations.storageItem.getStorageItemByReferencedId.GetStorageItemByReferencedIdOperation;
@@ -22,7 +23,7 @@ public class GetStorageItemByReferencedIdOperationProcessor implements GetStorag
         Optional<StorageItem> storageItemOptional = this.storageItemRepository.findStorageItemByReferencedItemId(UUID.fromString(input.getId()));
 
         if (storageItemOptional.isEmpty()) {
-            throw new ItemNotFoundException(input.getId());
+            throw new ReferencedItemNotFoundException(input.getId());
         }
 
         StorageItem item = storageItemOptional.get();

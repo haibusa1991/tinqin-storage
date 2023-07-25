@@ -29,7 +29,7 @@ public interface StorageItemRestExport {
 //    ExportStorageItemResult exportItem(@Param("itemId") String itemId, @Param ExportStorageItemInput input);
 
     @RequestLine("GET /storage-items/{itemId}")
-    GetStorageItemByReferencedIdResult GetItemByReferencedItemId(@Param("itemId") String itemId);
+    GetStorageItemByReferencedIdResult getItemByReferencedItemId(@Param("itemId") String itemId);
 
     @RequestLine("GET /storage-items")
     GetAllStorageItemResult getAllItems();

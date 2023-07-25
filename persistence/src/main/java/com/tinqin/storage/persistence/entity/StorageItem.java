@@ -32,12 +32,4 @@ public class StorageItem {
 
     private Integer quantity;
 
-    public void increaseQuantity(Integer amount) {
-        this.quantity += amount;
-    }
-
-    public void decreaseQuantity(Integer amount) {
-        this.quantity -= amount;
-    }
-
 }

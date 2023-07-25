@@ -7,6 +7,9 @@ import com.tinqin.storage.api.operations.storageItem.changeStorageItemPrice.Chan
 import com.tinqin.storage.api.operations.storageItem.createStorageItem.CreateStorageItemInput;
 import com.tinqin.storage.api.operations.storageItem.createStorageItem.CreateStorageItemOperation;
 import com.tinqin.storage.api.operations.storageItem.createStorageItem.CreateStorageItemResult;
+import com.tinqin.storage.api.operations.storageItem.editStorageItem.EditStorageItemInput;
+import com.tinqin.storage.api.operations.storageItem.editStorageItem.EditStorageItemOperation;
+import com.tinqin.storage.api.operations.storageItem.editStorageItem.EditStorageItemResult;
 import com.tinqin.storage.api.operations.storageItem.exportStorageItemQuantity.ExportStorageItemInput;
 import com.tinqin.storage.api.operations.storageItem.exportStorageItemQuantity.ExportStorageItemOperation;
 import com.tinqin.storage.api.operations.storageItem.exportStorageItemQuantity.ExportStorageItemResult;
@@ -23,42 +26,53 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/storage-items")
 public class StorageItemController {
     private final CreateStorageItemOperation createNewStorageItem;
     private final GetStorageItemByReferencedIdOperation getStorageItemByReferencedId;
     private final CreateAllStorageItemOperation getAllItems;
-    private final ChangeStorageItemPriceOperation changeStorageItemPrice;
-    private final ImportStorageItemOperation importStorageItem;
-    private final ExportStorageItemOperation exportStorageItem;
+    private final EditStorageItemOperation editStorageItem;
+//    private final ChangeStorageItemPriceOperation changeStorageItemPrice;
+//    private final ImportStorageItemOperation importStorageItem;
+//    private final ExportStorageItemOperation exportStorageItem;
 
+
+    //    @PatchMapping("/edit-price")
+//    public ResponseEntity<ChangeStorageItemPriceResult> changeStorageItemPrice(@RequestBody @Valid ChangeStorageItemPriceInput input) {
+//        return ResponseEntity.ok(this.changeStorageItemPrice.process(input));
+//    }
+//
+//    @PatchMapping("/import")
+//    public ResponseEntity<ImportStorageItemResult> importStorageItem(@RequestBody @Valid ImportStorageItemInput input) {
+//        return ResponseEntity.ok(this.importStorageItem.process(input));
+//    }
+//
+//    @PatchMapping("/export")
+//    public ResponseEntity<ExportStorageItemResult> exportStorageItem(@RequestBody @Valid ExportStorageItemInput input) {
+//        return ResponseEntity.ok(this.exportStorageItem.process(input));
+//    }
     @PostMapping
     public ResponseEntity<CreateStorageItemResult> createStorageItem(@RequestBody @Valid CreateStorageItemInput request) {
         return new ResponseEntity<>(this.createNewStorageItem.process(request), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/edit-price")
-    public ResponseEntity<ChangeStorageItemPriceResult> changeStorageItemPrice(@RequestBody @Valid ChangeStorageItemPriceInput input) {
-        return ResponseEntity.ok(this.changeStorageItemPrice.process(input));
-    }
-
-    @PatchMapping("/import")
-    public ResponseEntity<ImportStorageItemResult> importStorageItem(@RequestBody @Valid ImportStorageItemInput input) {
-        return ResponseEntity.ok(this.importStorageItem.process(input));
-    }
-
-    @PatchMapping("/export")
-    public ResponseEntity<ExportStorageItemResult> exportItem(@RequestBody @Valid ExportStorageItemInput input) {
-        return ResponseEntity.ok(this.exportStorageItem.process(input));
-    }
-
     @GetMapping("/{referencedItemId}")
-    public ResponseEntity<GetStorageItemByReferencedIdResult> GetItemByReferencedItemId(@PathVariable String referencedItemId) {
+    public ResponseEntity<GetStorageItemByReferencedIdResult> getItemByReferencedItemId(@PathVariable String referencedItemId) {
         return ResponseEntity.ok(this.getStorageItemByReferencedId.process(GetStorageItemByReferencedIdInput.builder().id(referencedItemId).build()));
+    }
+
+    @PutMapping("/{referencedItemId}")
+    public ResponseEntity<EditStorageItemResult> editStorageItem(@PathVariable @org.hibernate.validator.constraints.UUID String referencedItemId, @RequestBody @Valid EditStorageItemInput input) {
+        input.setReferencedItemId(UUID.fromString(referencedItemId));
+        return ResponseEntity.ok(this.editStorageItem.process(input));
     }
 
     @GetMapping

@@ -8,8 +8,8 @@ import com.tinqin.storage.core.exception.ItemNotFoundException;
 import com.tinqin.storage.core.exception.ReferencedItemNotFoundException;
 import com.tinqin.storage.persistence.entity.StorageItem;
 import com.tinqin.storage.persistence.repository.StorageItemRepository;
-import com.tinqin.zoostore.api.operations.item.getItemById.GetItemByIdResult;
-import com.tinqin.zoostore.restexport.ZooStoreRestExport;
+//import com.tinqin.zoostore.api.operations.item.getItemById.GetItemByIdResult;
+//import com.tinqin.zoostore.restexport.ZooStoreRestExport;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CreateStorageItemOperationProcessor implements CreateStorageItemOperation {
     private final StorageItemRepository storageItemRepository;
-    private final ZooStoreRestExport zooStoreRestExport;
+//    private final ZooStoreRestExport zooStoreRestExport;
 
 
     @Override
@@ -33,11 +33,11 @@ public class CreateStorageItemOperationProcessor implements CreateStorageItemOpe
             throw new ItemExistsException(input.getReferencedItemId());
         }
 
-        try {
-            zooStoreRestExport.getItemById(input.getReferencedItemId());
-        } catch (FeignException e) {
-            throw new ReferencedItemNotFoundException(input.getReferencedItemId());
-        }
+//        try {
+//            zooStoreRestExport.getItemById(input.getReferencedItemId());
+//        } catch (FeignException e) {
+//            throw new ReferencedItemNotFoundException(  input.getReferencedItemId());
+//        }
 
         StorageItem item = StorageItem.builder()
                 .referencedItemId(UUID.fromString(input.getReferencedItemId()))

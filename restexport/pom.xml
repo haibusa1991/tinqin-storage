@@ -7,16 +7,16 @@
         <artifactId>storage</artifactId>
         <version>${revision}</version>
     </parent>
-    <artifactId>domain</artifactId>
+    <artifactId>restexport</artifactId>
     <version>${revision}</version>
-    <name>domain</name>
-    <description>domain</description>
+    <name>restexport</name>
+    <description>restexport</description>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.tinqin.zoostore</groupId>-->
-<!--            <artifactId>restexport</artifactId>-->
-<!--            <version>${zoostore.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.tinqin.storage</groupId>
+            <artifactId>api</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 </project>

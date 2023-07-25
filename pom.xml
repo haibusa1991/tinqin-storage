@@ -10,8 +10,7 @@
         		<relativePath/> <!-- lookup parent from repository -->
     </parent>
     <properties>
-        <revision>0.0.3-SNAPSHOT</revision>
-        <zoostore.version>0.0.5-SNAPSHOT</zoostore.version>
+        <revision>0.0.4-SNAPSHOT</revision>
         <java.version>17</java.version>
     </properties>
     <groupId>com.tinqin.storage</groupId>
@@ -33,7 +32,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -52,12 +50,6 @@
             <version>3.8.0</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-openfeign-core</artifactId>-->
-<!--            <version>4.0.3</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-jackson</artifactId>
@@ -71,6 +63,7 @@
         <module>domain</module>
         <module>persistence</module>
         <module>rest</module>
+        <module>restexport</module>
     </modules>
 
     <build>

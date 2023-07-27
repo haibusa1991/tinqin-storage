@@ -29,6 +29,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -65,7 +67,7 @@ public class StorageItemController {
     }
 
     @GetMapping("/{referencedItemId}")
-    public ResponseEntity<GetStorageItemByReferencedIdResult> getItemByReferencedItemId(@PathVariable String referencedItemId) {
+    public ResponseEntity<GetStorageItemByReferencedIdResult> getItemByReferencedItemId(@PathVariable Set<String> referencedItemId) {
         return ResponseEntity.ok(this.getStorageItemByReferencedId.process(GetStorageItemByReferencedIdInput.builder().id(referencedItemId).build()));
     }
 

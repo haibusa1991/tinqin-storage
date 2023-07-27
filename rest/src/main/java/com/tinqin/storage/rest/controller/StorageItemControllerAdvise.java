@@ -1,6 +1,7 @@
 package com.tinqin.storage.rest.controller;
 
 import com.tinqin.storage.core.exception.InsufficientItemQuantityException;
+import com.tinqin.storage.core.exception.InvalidUuidException;
 import com.tinqin.storage.core.exception.ItemExistsException;
 import com.tinqin.storage.core.exception.ReferencedItemNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,12 @@ public class StorageItemControllerAdvise {
     @ExceptionHandler(InsufficientItemQuantityException.class)
     @ResponseBody
     public ResponseEntity<String> handleInsufficientItemQuantityExceptions(InsufficientItemQuantityException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidUuidException.class)
+    @ResponseBody
+    public ResponseEntity<String> handleInvalidUuidException(InvalidUuidException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

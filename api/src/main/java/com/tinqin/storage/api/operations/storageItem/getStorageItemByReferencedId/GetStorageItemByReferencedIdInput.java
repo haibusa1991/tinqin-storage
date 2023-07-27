@@ -7,11 +7,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UUID;
 
+import java.util.List;
+import java.util.Set;
+
 @Setter
 @Getter
 @Builder
 public class GetStorageItemByReferencedIdInput implements ProcessorInput {
 
-    @UUID
-    private String id;
+    private Set<String> id;
 }

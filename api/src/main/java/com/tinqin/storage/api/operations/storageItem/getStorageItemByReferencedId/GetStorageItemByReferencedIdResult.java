@@ -3,6 +3,7 @@ package com.tinqin.storage.api.operations.storageItem.getStorageItemByReferenced
 import com.tinqin.storage.api.base.ProcessorResult;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Setter
@@ -11,8 +12,5 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetStorageItemByReferencedIdResult implements ProcessorResult {
-    private UUID id;
-    private UUID referencedItemId;
-    private double price;
-    private int quantity;
+    List<GetStorageItemByReferenceIdSingleItem> items;
 }

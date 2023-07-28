@@ -1,17 +1,18 @@
 package com.tinqin.storage.api.operations.storageItem.getStorageItemByReferencedId;
 
 import com.tinqin.storage.api.base.ProcessorResult;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
 @Setter(AccessLevel.PRIVATE)
 @Getter
 @Builder
+@AllArgsConstructor
 public class GetStorageItemByReferenceIdSingleItem implements ProcessorResult {
+    public GetStorageItemByReferenceIdSingleItem() {
+    }
+
     private UUID id;
     private UUID referencedItemId;
     private double price;

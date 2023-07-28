@@ -10,6 +10,8 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
+import java.util.Set;
+
 @Headers({"Content-Type: application/json"})
 public interface StorageItemRestExport {
 
@@ -28,8 +30,8 @@ public interface StorageItemRestExport {
 //    @RequestLine("PATCH /storage-items/{itemId}/export")
 //    ExportStorageItemResult exportItem(@Param("itemId") String itemId, @Param ExportStorageItemInput input);
 
-    @RequestLine("GET /storage-items/{itemId}")
-    GetStorageItemByReferencedIdResult getItemByReferencedItemId(@Param("itemId") String itemId);
+    @RequestLine("GET /storage-items/{referencedItemId}")
+    GetStorageItemByReferencedIdResult getItemByReferencedItemId(@Param("referencedItemId") Set<String> referencedItemId);
 
     @RequestLine("GET /storage-items")
     GetAllStorageItemResult getAllItems();

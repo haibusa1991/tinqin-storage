@@ -1,5 +1,7 @@
 package com.tinqin.storage.restexport;
 
+import com.tinqin.storage.api.operations.order.placeOrder.PlaceOrderInput;
+import com.tinqin.storage.api.operations.order.placeOrder.PlaceOrderResult;
 import com.tinqin.storage.api.operations.storageItem.createStorageItem.CreateStorageItemInput;
 import com.tinqin.storage.api.operations.storageItem.createStorageItem.CreateStorageItemResult;
 import com.tinqin.storage.api.operations.storageItem.editStorageItem.EditStorageItemInput;
@@ -21,19 +23,13 @@ public interface StorageItemRestExport {
     @RequestLine("PUT /storage-items/{itemId}")
     EditStorageItemResult editStorageItem(@Param("itemId") String id, @Param EditStorageItemInput input);
 
-//    @RequestLine("PATCH /storage-items/{itemId}/edit-price")
-//    ChangeStorageItemPriceResult editVendor(@Param("itemId") String vendorId, @Param ChangeStorageItemPriceInput input);
-//
-//    @RequestLine("PATCH /storage-items/{itemId}/import")
-//    ImportStorageItemResult importStorageItem(@Param("itemId") String itemId, @Param ImportStorageItemInput input);
-//
-//    @RequestLine("PATCH /storage-items/{itemId}/export")
-//    ExportStorageItemResult exportItem(@Param("itemId") String itemId, @Param ExportStorageItemInput input);
-
     @RequestLine("GET /storage-items/{referencedItemId}")
     GetStorageItemByReferencedIdResult getItemByReferencedItemId(@Param("referencedItemId") Set<String> referencedItemId);
 
     @RequestLine("GET /storage-items")
     GetAllStorageItemResult getAllItems();
+
+    @RequestLine("POST /order")
+    PlaceOrderResult placeOrder(@Param PlaceOrderInput input);
 
 }

@@ -30,6 +30,6 @@ public interface StorageItemRestExport {
     GetAllStorageItemResult getAllItems();
 
     @RequestLine("POST /order")
-    PlaceOrderResult placeOrder(@Param PlaceOrderInput input);
+    PlaceOrderResult placeOrder(PlaceOrderInput input);
 
 }

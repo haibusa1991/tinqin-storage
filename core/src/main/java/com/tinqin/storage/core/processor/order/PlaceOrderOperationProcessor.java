@@ -4,69 +4,105 @@ import com.tinqin.storage.api.operations.order.placeOrder.*;
 import com.tinqin.storage.core.exception.InsufficientItemQuantityException;
 import com.tinqin.storage.core.exception.ReferencedItemNotFoundException;
 import com.tinqin.storage.persistence.entity.Order;
+import com.tinqin.storage.persistence.entity.OrderItem;
 import com.tinqin.storage.persistence.entity.StorageItem;
 import com.tinqin.storage.persistence.repository.OrderRepository;
 import com.tinqin.storage.persistence.repository.StorageItemRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PlaceOrderOperationProcessor implements PlaceOrderOperation {
     private final StorageItemRepository storageItemRepository;
     private final OrderRepository orderRepository;
 
-
     @Override
     public PlaceOrderResult process(PlaceOrderInput input) {
 
-        return new PlaceOrderResult(input.getCartItems()
+        input.getCartItems()
                 .stream()
-                .map(this::exportItem)
-                .toList()
-        );
-    }
+                .map(this::mapPlaceOrderInputCartItemToOrderItem)
+                .map(this::verifyItemExists)
+                .forEach(this::exportCartItem);
 
-    private PlaceOrderResultSingleItem exportItem(PlaceOrderInputCartItem cartItem) {
-        StorageItem item = this.storageItemRepository
-                .findStorageItemByReferencedItemId(UUID.fromString(cartItem.getReferencedItemId()))
-                .orElseThrow(() -> new ReferencedItemNotFoundException(cartItem.getReferencedItemId()));
-
-        int quantityDifference = item.getQuantity() - cartItem.getQuantity();
-        if (quantityDifference < 0) {
-            throw new InsufficientItemQuantityException(cartItem.getReferencedItemId());
-        }
-
-        item.setQuantity(quantityDifference);
-
-        StorageItem persistedStorageItem = this.storageItemRepository.save(item);
+        Set<OrderItem> orderItems = input.getCartItems()
+                .stream()
+                .map(this::mapPlaceOrderInputCartItemToOrderItem)
+                .collect(Collectors.toSet());
 
         Order order = Order.builder()
-                .referencedItemId(persistedStorageItem.getReferencedItemId())
-                .price(BigDecimal.valueOf(cartItem.getPrice()))
-                .quantity(cartItem.getQuantity())
                 .timestamp(LocalDateTime.now(Clock.systemUTC()))
-                .user(UUID.fromString(cartItem.getUserId()))
+                .user(UUID.fromString(input.getUserId()))
+                .items(orderItems)
+                .orderPrice(orderItems.stream().map(this::getItemPrice).reduce(BigDecimal.ZERO, BigDecimal::add))
                 .build();
 
         Order persistedOrder = this.orderRepository.save(order);
 
-        return PlaceOrderResultSingleItem.builder()
-                .id(persistedOrder.getId())
-                .referencedItemId(persistedOrder.getReferencedItemId())
-                .price(persistedOrder.getPrice().doubleValue())
-                .quantity(persistedOrder.getQuantity())
+        return PlaceOrderResult.builder()
+                .items(persistedOrder.getItems().stream().map(this::mapOrderItemToPlaceOrderResultSingleItem).toList())
                 .timestamp(persistedOrder.getTimestamp())
-                .userId(persistedOrder.getUser())
+                .user(persistedOrder.getUser())
+                .orderPrice(persistedOrder.getOrderPrice().doubleValue())
                 .build();
     }
 
+    private BigDecimal getItemPrice(OrderItem orderItem) {
+        return orderItem.getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity()));
+    }
+
+
+    private void exportCartItem(OrderItem orderItem) {
+        StorageItem storageItem = this.storageItemRepository
+                .findStorageItemByReferencedItemId(orderItem.getReferencedItemId())
+                .orElseThrow();
+        Integer difference = storageItem.getQuantity() - orderItem.getQuantity();
+
+        if (difference < 0) {
+            throw new InsufficientItemQuantityException(storageItem.getReferencedItemId().toString());
+        }
+
+        storageItem.setQuantity(difference);
+        this.storageItemRepository.save(storageItem);
+    }
+
+    private OrderItem verifyItemExists(OrderItem orderItem) {
+        UUID itemId = orderItem.getReferencedItemId();
+
+        if (!this.storageItemRepository.existsStorageItemByReferencedItemId(itemId)) {
+            throw new ReferencedItemNotFoundException(itemId.toString());
+        }
+
+        return orderItem;
+    }
+
+
+    private OrderItem mapPlaceOrderInputCartItemToOrderItem(PlaceOrderInputCartItem item) {
+
+        return OrderItem.builder()
+                .referencedItemId(UUID.fromString(item.getReferencedItemId()))
+                .price(BigDecimal.valueOf(item.getPrice()))
+                .quantity(item.getQuantity())
+                .build();
+    }
+
+    private PlaceOrderResultSingleItem mapOrderItemToPlaceOrderResultSingleItem(OrderItem orderItem) {
+        return PlaceOrderResultSingleItem.builder()
+                .referencedItemId(orderItem.getReferencedItemId())
+                .price(orderItem.getPrice().doubleValue())
+                .quantity(orderItem.getQuantity())
+                .build();
+    }
 
 }
 

@@ -17,5 +17,4 @@ public class PlaceOrderInputCartItem implements ProcessorInput {
     private String referencedItemId;
     private Double price;
     private Integer quantity;
-    private String userId;
 }

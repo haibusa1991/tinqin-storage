@@ -12,10 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlaceOrderResultSingleItem implements ProcessorResult {
-    private UUID id;
     private UUID referencedItemId;
     private Double price;
     private Integer quantity;
-    private LocalDateTime timestamp;
-    private UUID userId;
 }

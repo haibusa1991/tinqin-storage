@@ -9,7 +9,9 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class PlaceOrderInput implements ProcessorInput {
 
     private List<PlaceOrderInputCartItem> cartItems;
+    private String userId;
 }

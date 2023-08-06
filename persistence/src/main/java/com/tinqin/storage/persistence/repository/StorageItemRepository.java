@@ -17,4 +17,5 @@ public interface StorageItemRepository extends JpaRepository<StorageItem, UUID> 
     Set<StorageItem> findByReferencedItemIdIn(List<UUID> uuids);
 
     Boolean existsStorageItemByReferencedItemId(UUID id);
+
 }

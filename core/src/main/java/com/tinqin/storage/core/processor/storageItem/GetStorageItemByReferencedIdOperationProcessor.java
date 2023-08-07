@@ -22,6 +22,11 @@ public class GetStorageItemByReferencedIdOperationProcessor implements GetStorag
 
     @Override
     public GetStorageItemByReferencedIdResult process(GetStorageItemByReferencedIdInput input) {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         List<String> invalidUuids = input.getId()
                 .stream()

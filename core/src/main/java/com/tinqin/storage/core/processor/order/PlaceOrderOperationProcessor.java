@@ -61,15 +61,16 @@ public class PlaceOrderOperationProcessor implements PlaceOrderOperation {
     }
 
     private BiTuple<Order, Double> useUserCredit(Order order, Double userCredit) {
-        Double orderPrice = order.getOrderPrice().doubleValue();
+        BigDecimal orderPrice = order.getOrderPrice();
 
-        if (orderPrice <= userCredit) {
+        if (order.getOrderPrice().doubleValue() <= userCredit) {
             order.setOrderPrice(BigDecimal.ZERO);
-            userCredit -= orderPrice;
+            userCredit = BigDecimal.valueOf(userCredit).subtract(orderPrice).doubleValue();
+            return BiTuple.<Order, Double>builder().firstElement(order).secondElement(userCredit).build();
         }
 
-        if (orderPrice > userCredit) {
-            order.setOrderPrice(BigDecimal.valueOf(orderPrice - userCredit));
+        if (order.getOrderPrice().doubleValue() > userCredit) {
+            order.setOrderPrice(orderPrice.subtract(BigDecimal.valueOf(userCredit)));
             userCredit = 0.0;
         }
 

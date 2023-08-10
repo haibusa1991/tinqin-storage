@@ -19,4 +19,5 @@ public class PlaceOrderResult implements ProcessorResult {
     private LocalDateTime timestamp;
     private UUID user;
     private Double orderPrice;
+    private Double remainingUserCredit;
 }

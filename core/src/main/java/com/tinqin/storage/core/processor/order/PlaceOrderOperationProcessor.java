@@ -10,13 +10,13 @@ import com.tinqin.storage.persistence.repository.OrderRepository;
 import com.tinqin.storage.persistence.repository.StorageItemRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,20 +47,38 @@ public class PlaceOrderOperationProcessor implements PlaceOrderOperation {
                 .orderPrice(orderItems.stream().map(this::getItemPrice).reduce(BigDecimal.ZERO, BigDecimal::add))
                 .build();
 
-        Order persistedOrder = this.orderRepository.save(order);
+        BiTuple<Order, Double> orderAfterCredit = this.useUserCredit(order, input.getUserCredit());
+
+        Order persistedOrder = this.orderRepository.save(orderAfterCredit.getFirstElement());
 
         return PlaceOrderResult.builder()
                 .items(persistedOrder.getItems().stream().map(this::mapOrderItemToPlaceOrderResultSingleItem).toList())
                 .timestamp(persistedOrder.getTimestamp())
                 .user(persistedOrder.getUser())
                 .orderPrice(persistedOrder.getOrderPrice().doubleValue())
+                .remainingUserCredit(orderAfterCredit.getSecondElement())
                 .build();
+    }
+
+    private BiTuple<Order, Double> useUserCredit(Order order, Double userCredit) {
+        Double orderPrice = order.getOrderPrice().doubleValue();
+
+        if (orderPrice <= userCredit) {
+            order.setOrderPrice(BigDecimal.ZERO);
+            userCredit -= orderPrice;
+        }
+
+        if (orderPrice > userCredit) {
+            order.setOrderPrice(BigDecimal.valueOf(orderPrice - userCredit));
+            userCredit = 0.0;
+        }
+
+        return BiTuple.<Order, Double>builder().firstElement(order).secondElement(userCredit).build();
     }
 
     private BigDecimal getItemPrice(OrderItem orderItem) {
         return orderItem.getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity()));
     }
-
 
     private void exportCartItem(OrderItem orderItem) {
         StorageItem storageItem = this.storageItemRepository
@@ -85,7 +103,6 @@ public class PlaceOrderOperationProcessor implements PlaceOrderOperation {
 
         return orderItem;
     }
-
 
     private OrderItem mapPlaceOrderInputCartItemToOrderItem(PlaceOrderInputCartItem item) {
 

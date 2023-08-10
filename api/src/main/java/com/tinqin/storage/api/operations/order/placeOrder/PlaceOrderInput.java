@@ -14,4 +14,5 @@ public class PlaceOrderInput implements ProcessorInput {
 
     private List<PlaceOrderInputCartItem> cartItems;
     private String userId;
+    private Double userCredit;
 }

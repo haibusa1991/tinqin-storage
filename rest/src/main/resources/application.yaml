@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/tinqin-storage?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${MYSQL_SERVER}:${MYSQL_SERVER_PORT}/${STORAGE_DB_NAME}?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
-    password: toor
+    password: ${MYSQL_ROOT_PASSWORD}
   sql:
     init:
       mode: always
@@ -18,5 +18,5 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
 server:
-  port: 8081
+  port: ${STORAGE_PORT}
 

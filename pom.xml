@@ -70,6 +70,7 @@
         <module>persistence</module>
         <module>rest</module>
         <module>restexport</module>
+        <module>annotation-processor</module>
     </modules>
 
     <build>

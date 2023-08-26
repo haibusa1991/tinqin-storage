@@ -10,7 +10,6 @@ import com.tinqin.storage.api.operations.storageItem.editStorageItem.EditStorage
 import com.tinqin.storage.api.operations.storageItem.getAllStorageItem.GetAllStorageItemResult;
 import com.tinqin.storage.api.operations.storageItem.getStorageItemByReferencedId.GetStorageItemByReferencedIdResult;
 import feign.Headers;
-import feign.Param;
 import feign.RequestLine;
 
 @Headers({
@@ -19,17 +18,17 @@ import feign.RequestLine;
 public interface StorageRestExport {
 
     @RequestLine("POST /")
-    CreateStorageItemResult createStorageItem(@Param CreateStorageItemInput request);
+    CreateStorageItemResult createStorageItem(@feign.Param CreateStorageItemInput request);
 
     @RequestLine("GET /")
-    GetStorageItemByReferencedIdResult getItemByReferencedItemId(@Param("referencedItemId") Set<String> referencedItemId);
+    GetStorageItemByReferencedIdResult getItemByReferencedItemId(@feign.Param("referencedItemId") Set<java.lang.String> referencedItemId);
 
     @RequestLine("PUT /")
-    EditStorageItemResult editStorageItem(@Param("referencedItemId") String referencedItemId, @Param EditStorageItemInput input);
+    EditStorageItemResult editStorageItem(@feign.Param("referencedItemId") java.lang.String referencedItemId, @feign.Param EditStorageItemInput input);
 
     @RequestLine("GET /")
     GetAllStorageItemResult getAllItems();
 
     @RequestLine("POST /order")
-    PlaceOrderResult placeOrder(@Param PlaceOrderInput input);
+    PlaceOrderResult placeOrder(@feign.Param PlaceOrderInput input);
 }

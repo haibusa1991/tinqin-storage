@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.tinqin.restexport</groupId>
             <artifactId>restexport</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${rest-export-revision}</version>
         </dependency>
     </dependencies>
 
@@ -44,7 +44,7 @@
                     <dependency>
                         <groupId>com.tinqin.storage</groupId>
                         <artifactId>api</artifactId>
-                        <version>0.0.8-SNAPSHOT</version>
+                        <version>${revision}</version>
                     </dependency>
                 </dependencies>
             </plugin>

@@ -11,6 +11,7 @@
     </parent>
     <properties>
         <revision>0.0.8-SNAPSHOT</revision>
+        <rest-export-revision>0.0.2-SNAPSHOT</rest-export-revision>
         <java.version>17</java.version>
     </properties>
     <groupId>com.tinqin.storage</groupId>

@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.tinqin.restexport</groupId>
             <artifactId>restexport</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${rest-export-revision}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -56,16 +56,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-<!--                <configuration>-->
-<!--                    <mainClass>com.tinqin.storage.rest.TinqinStorageApplication.class</mainClass>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>repackage</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
             </plugin>
         </plugins>
     </build>

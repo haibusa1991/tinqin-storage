@@ -1,7 +1,15 @@
+MYSQL_SERVER: "${MYSQL_SERVER_NAME}:${MYSQL_SERVER_PORT}"
+MYSQL_SERVER_NAME: localhost
+MYSQL_SERVER_PORT: 3306
+MYSQL_ROOT_PASSWORD: toor
+STORAGE_DB_NAME: tinqin-storage
+STORAGE_PORT: 8081
+
+
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_SERVER}:${MYSQL_SERVER_PORT}/${STORAGE_DB_NAME}?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${MYSQL_SERVER}/${STORAGE_DB_NAME}?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: ${MYSQL_ROOT_PASSWORD}
   sql:

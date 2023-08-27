@@ -31,7 +31,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Validated
-@RequestMapping("/storage-items")
+@RequestMapping(path="/storage-items")
 public class StorageItemController {
     private final CreateStorageItemOperation createNewStorageItem;
     private final GetStorageItemByReferencedIdOperation getStorageItemByReferencedId;
@@ -55,7 +55,7 @@ public class StorageItemController {
             @ApiResponse(responseCode = "400", description = "Specified id of the referenced item is not valid UUID.", content = @Content()),
             @ApiResponse(responseCode = "200", description = "Returns storage.")})
     @RestExport
-    @GetMapping("/{referencedItemId}")
+    @GetMapping(path="/{referencedItemId}")
     public ResponseEntity<GetStorageItemByReferencedIdResult> getItemByReferencedItemId(@PathVariable Set<String> referencedItemId) {
         return ResponseEntity.ok(this.getStorageItemByReferencedId.process(GetStorageItemByReferencedIdInput.builder().id(referencedItemId).build()));
     }
@@ -66,7 +66,7 @@ public class StorageItemController {
             @ApiResponse(responseCode = "400", description = "Specified id of the referenced item is not valid UUID.", content = @Content()),
             @ApiResponse(responseCode = "200", description = "Returns storage.")})
     @RestExport
-    @PutMapping("/{referencedItemId}")
+    @PutMapping(path="/{referencedItemId}")
     public ResponseEntity<EditStorageItemResult> editStorageItem(@PathVariable @org.hibernate.validator.constraints.UUID String referencedItemId, @RequestBody @Valid EditStorageItemInput input) {
         input.setReferencedItemId(UUID.fromString(referencedItemId));
         return ResponseEntity.ok(this.editStorageItem.process(input));

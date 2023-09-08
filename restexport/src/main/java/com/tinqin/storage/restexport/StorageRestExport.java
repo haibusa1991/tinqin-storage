@@ -18,6 +18,9 @@ import feign.RequestLine;
 })
 public interface StorageRestExport {
 
+    @RequestLine("POST /order")
+    PlaceOrderResult placeOrder(PlaceOrderInput input);
+
     @RequestLine("POST /storage-items")
     CreateStorageItemResult createStorageItem(CreateStorageItemInput request);
 
@@ -29,7 +32,4 @@ public interface StorageRestExport {
 
     @RequestLine("GET /storage-items")
     GetAllStorageItemResult getAllItems();
-
-    @RequestLine("POST /order")
-    PlaceOrderResult placeOrder(PlaceOrderInput input);
 }
